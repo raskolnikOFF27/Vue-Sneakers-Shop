@@ -1,0 +1,21 @@
+<template>
+  <div class="flex items-center gap-5 mb-8">
+    <svg
+      class="cursor-pointer opacity-40 hover:opacity-100 transition hover:translate-x-1"
+      width="18"
+      height="18"
+      viewBox="0 0 7 12"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M1 0.999999L6 6L1 11"
+        stroke="black"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+    <h2 class="text-2xl font-bold">Корзина</h2>
+  </div>
+</template>
