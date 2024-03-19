@@ -5,3 +5,7 @@
 body {
   background-color: rgb(247 254 231);
 }
+
+.close-btn {
+  padding: 5px;
+}

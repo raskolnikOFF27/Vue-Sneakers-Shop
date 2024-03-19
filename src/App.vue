@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch, reactive } from 'vue'
+import { onMounted, ref, watch, reactive, provide } from 'vue'
 import axios from 'axios'
 
 import Header from './components/Header.vue'
@@ -7,6 +7,20 @@ import CardList from './components/CardList.vue'
 import Drawer from './components/Drawer.vue'
 
 const items = ref([])
+
+const cart = ref([])
+
+const drawerState = ref(false)
+
+const totalPrice = cart.value.reduce((acc, item) => acc + item.price, 0)
+
+const closeDrawer = () => {
+  drawerState.value = false
+}
+
+const openDrawer = () => {
+  drawerState.value = true
+}
 
 const filters = reactive({
   sortBy: 'title',
@@ -19,6 +33,24 @@ const onChangeSelect = (event) => {
 
 const onChangeSearchInput = (event) => {
   filters.searchQuery = event.target.value
+}
+
+const addToCart = (item) => {
+  cart.value.push(item)
+  item.isAdded = true
+}
+
+const removeFromCart = (item) => {
+  cart.value.splice(cart.value.indexOf(item), 1)
+  item.isAdded = false
+}
+
+const onClickAddPlus = (item) => {
+  if (!item.isAdded) {
+    addToCart(item)
+  } else {
+    removeFromCart(item)
+  }
 }
 
 const fetchFavorites = async () => {
@@ -44,7 +76,25 @@ const fetchFavorites = async () => {
 }
 
 const addToFavorite = async (item) => {
-  item.isFavorite = true
+  try {
+    if (!item.isFavorite) {
+      const obj = {
+        parentId: item.id
+      }
+
+      item.isFavorite = true
+
+      const { data } = await axios.post(`https://91e076eff4e58ce7.mokky.dev/favorites`, obj)
+
+      item.favoriteId = data.id
+    } else {
+      item.isFavorite = false
+      await axios.delete(`https://91e076eff4e58ce7.mokky.dev/favorites/${item.favoriteId}`)
+      item.favoriteId = null
+    }
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 const fetchItems = async () => {
@@ -64,6 +114,7 @@ const fetchItems = async () => {
     items.value = data.map((obj) => ({
       ...obj,
       isFavorite: false,
+      favoriteId: null,
       isAdded: false
     }))
   } catch (err) {
@@ -74,14 +125,38 @@ const fetchItems = async () => {
 onMounted(async () => {
   await fetchItems()
   await fetchFavorites()
+  console.log('Проект подгружен!')
 })
+
 watch(filters, fetchItems)
+
+provide('cart', {
+  cart,
+  closeDrawer,
+  openDrawer,
+  addToCart,
+  removeFromCart
+})
+
+const question = 5 !== '5'
+
+console.log(question)
+
+function outerFunction() {
+  const x = 10
+  function innerFunction() {
+    const y = 20
+    console.log(x + y)
+  }
+  innerFunction()
+}
+outerFunction()
 </script>
 
 <template>
-  <!-- <Drawer /> -->
+  <Drawer v-if="drawerState" />
   <div class="bg-white w-4/5 m-auto rounded-xl shadow-xl mt-14">
-    <Header />
+    <Header :total-price="totalPrice" @open-drawer="openDrawer" />
     <div class="p-10">
       <div class="flex justify-between items-center">
         <h2 class="text-3xl font-bold mb-8">Все кроссовки</h2>
@@ -105,7 +180,7 @@ watch(filters, fetchItems)
       </div>
 
       <div class="mt-10">
-        <CardList :items="items" />
+        <CardList :items="items" @add-to-favorite="addToFavorite" @add-to-cart="onClickAddPlus" />
       </div>
     </div>
   </div>
