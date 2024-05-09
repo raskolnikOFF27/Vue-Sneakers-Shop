@@ -165,6 +165,25 @@ onMounted(async () => {
 
 watch(filters, fetchItems)
 
+//Глубокая проверка, где при каждом добавлении/удалении товара из корзины watch это отслеживает
+watch(
+  cart,
+  () => {
+    console.log(cart.value)
+  },
+  {
+    deep: true
+  }
+)
+
+// Неглубокая проверка на watch
+watch(cart, () => {
+  items.value = items.value.map((item) => ({
+    ...item,
+    isAdded: false
+  }))
+})
+
 provide('cartActions', {
   cart,
   closeDrawer,
