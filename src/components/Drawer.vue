@@ -2,12 +2,14 @@
 import { inject } from 'vue'
 import DrawerHead from './DrawerHead.vue'
 import CartItemList from './CartItemList.vue'
+import InfoBlock from './InfoBlock.vue'
 const { closeDrawer } = inject('cartActions')
 const props = defineProps({
   totalPrice: Number,
   vatPrice: Number,
   cartButtonDisabled: Boolean,
-  isCreatingOrder: Boolean
+  isCreatingOrder: Boolean,
+  cart: Array
 })
 
 const emit = defineEmits(['createOrder'])
@@ -18,9 +20,16 @@ const emit = defineEmits(['createOrder'])
   <div class="bg-white w-96 h-full fixed right-0 top-0 z-20 p-8">
     <DrawerHead />
 
+    <InfoBlock
+      v-if="cart?.length == 0"
+      title="Корзина пустая"
+      description="Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ."
+      image-url="/public/empty-box.png"
+    />
+
     <CartItemList />
 
-    <div class="flex flex-col gap-5 mt-7">
+    <div v-if="totalPrice" class="flex flex-col gap-5 mt-7">
       <div class="flex gap-2">
         <span>Итого:</span>
         <div class="flex-1 border-b border-dash"></div>

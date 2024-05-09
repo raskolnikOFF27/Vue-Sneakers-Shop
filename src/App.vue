@@ -200,6 +200,7 @@ provide('cartActions', {
     :vatPrice="vatPrice"
     :cartButtonDisabled="cartButtonDisabled"
     :is-creating-order="isCreatingOrder"
+    :cart="cart"
     @create-order="createOrder"
   />
   <div class="bg-white w-4/5 m-auto rounded-xl shadow-xl mt-14">
