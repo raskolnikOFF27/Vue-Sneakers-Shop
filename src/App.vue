@@ -183,7 +183,7 @@ watch(cart, () => {
     isAdded: false
   }))
 })
-
+//Provide's, используемые в других файлах
 provide('cartActions', {
   cart,
   closeDrawer,
