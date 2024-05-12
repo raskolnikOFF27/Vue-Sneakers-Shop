@@ -17,18 +17,20 @@ const emit = defineEmits(['createOrder'])
 
 <template>
   <div @click="closeDrawer" class="fixed top-0 left-0 h-full w-full bg-black z-10 opacity-40"></div>
+  <!--       :style="cart?.length === 0 ? {justifyContent: 'center'} :  {justifyContent: 'space-betwen'}" -->
   <div class="bg-white w-96 h-full fixed right-0 top-0 z-20 p-8 flex flex-col justify-between">
     <div>
       <DrawerHead />
 
+      <CartItemList />
+    </div>
+
+    <div v-if="cart?.length == 0" class="flex h-full items-center">
       <InfoBlock
-        v-if="cart?.length == 0"
         title="Корзина пустая"
         description="Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ."
         image-url="/public/empty-box.png"
       />
-
-      <CartItemList />
     </div>
 
     <div v-if="totalPrice" class="flex flex-col gap-5 mt-7">
