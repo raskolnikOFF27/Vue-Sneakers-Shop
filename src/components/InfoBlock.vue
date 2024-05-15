@@ -1,6 +1,6 @@
 <script setup>
 import { inject } from 'vue'
-const { closeDrawer, test, testArg } = inject('cartActions')
+const { closeDrawer } = inject('cartActions')
 
 const props = defineProps({
   title: String,
@@ -43,7 +43,6 @@ const props = defineProps({
         />
       </svg>
       Вернуться назад
-      {{ testArg }}
     </button>
   </div>
 </template>

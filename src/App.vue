@@ -57,12 +57,6 @@ const createOrder = async () => {
 }
 //Корзина end
 
-const test = () => {
-  console.log(123123123)
-}
-
-const testArg = ref('teeeeext')
-
 //Глубокая проверка, где при каждом добавлении/удалении товара из корзины watch это отслеживает
 
 // Неглубокая проверка на watch
@@ -83,9 +77,7 @@ provide('cartActions', {
   closeDrawer,
   openDrawer,
   addToCart,
-  removeFromCart,
-  test,
-  testArg
+  removeFromCart
 })
 </script>
 
@@ -101,8 +93,8 @@ provide('cartActions', {
   />
   <div class="bg-white w-4/5 m-auto rounded-xl shadow-xl mt-14">
     <Header :total-price="totalPrice" @open-drawer="openDrawer" />
+
     <div class="p-10">
-      <!-- <Home /> -->
       <router-view></router-view>
     </div>
   </div>
