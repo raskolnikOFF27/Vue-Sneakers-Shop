@@ -1,6 +1,6 @@
 <script setup>
 import { inject } from 'vue'
-const { closeDrawer } = inject('cartActions')
+const { closeDrawer, test, testArg } = inject('cartActions')
 
 const props = defineProps({
   title: String,
@@ -11,7 +11,7 @@ const props = defineProps({
 
 <template>
   <div class="flex flex-col items-center text-center max-w-xs mx-auto">
-    <img height="120" width="120" :src="props.imageUrl" alt="Cart is empty" />
+    <img @click="test" height="120" width="120" :src="props.imageUrl" alt="Cart is empty" />
     <h2 class="mt-4 text-2xl font-medium">{{ props.title }}</h2>
     <p class="text-gray-400 mb-8">{{ props.description }}</p>
 
@@ -43,6 +43,7 @@ const props = defineProps({
         />
       </svg>
       Вернуться назад
+      {{ testArg }}
     </button>
   </div>
 </template>
