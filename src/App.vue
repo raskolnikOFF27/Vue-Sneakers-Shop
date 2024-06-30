@@ -41,7 +41,7 @@ const removeFromCart = (item) => {
 const createOrder = async () => {
   try {
     isCreatingOrder.value = true
-    const { data } = await axios.post('https://3c5b6e4314bc9170.mokky.dev/orders', {
+    const { data } = await axios.post('https://91e076eff4e58ce7.mokky.dev/orders', {
       items: cart.value,
       totalPrice: totalPrice.value + vatPrice.value
     })

@@ -15,10 +15,12 @@ const props = defineProps({
 const emit = defineEmits(['createOrder'])
 </script>
 
-<template>
+<template v-auto-animate>
   <div @click="closeDrawer" class="fixed top-0 left-0 h-full w-full bg-black z-10 opacity-40"></div>
-  <!--       :style="cart?.length === 0 ? {justifyContent: 'center'} :  {justifyContent: 'space-betwen'}" -->
-  <div class="bg-white w-96 h-full fixed right-0 top-0 z-20 p-8 flex flex-col justify-between">
+  <div
+    v-auto-animate
+    class="bg-white w-96 h-full fixed right-0 top-0 z-20 p-8 flex flex-col justify-between"
+  >
     <div>
       <DrawerHead />
 

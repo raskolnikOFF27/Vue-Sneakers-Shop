@@ -1,9 +1,12 @@
 <script setup>
 import axios from 'axios'
-import { inject, ref, reactive, watch, onMounted } from 'vue'
+import { inject, ref, reactive, watch, onMounted, computed, watchEffect } from 'vue'
+import { useMainStore } from '../stores/MainStore.js'
 import CardList from '../components/CardList.vue'
 
 const { addToCart, removeFromCart, cart } = inject('cartActions')
+
+const mainStore = useMainStore()
 
 const filters = reactive({
   sortBy: 'title',
@@ -38,7 +41,7 @@ const fetchItems = async () => {
       params.title = `*${filters.searchQuery}*`
     }
 
-    const { data } = await axios.get(`https://3c5b6e4314bc9170.mokky.dev/sneakers`, {
+    const { data } = await axios.get(`https://91e076eff4e58ce7.mokky.dev/sneakers`, {
       params
     })
 
@@ -62,12 +65,12 @@ const addToFavorite = async (item) => {
 
       item.isFavorite = true
 
-      const { data } = await axios.post(`https://3c5b6e4314bc9170.mokky.dev/favorites`, obj)
+      const { data } = await axios.post(`https://91e076eff4e58ce7.mokky.dev/favorites`, obj)
 
       item.favoriteId = data.id
     } else {
       item.isFavorite = false
-      await axios.delete(`https://3c5b6e4314bc9170.mokky.dev/favorites/${item.favoriteId}`)
+      await axios.delete(`https://91e076eff4e58ce7.mokky.dev/favorites/${item.favoriteId}`)
       item.favoriteId = null
     }
   } catch (err) {
@@ -78,7 +81,7 @@ const addToFavorite = async (item) => {
 const fetchFavorites = async () => {
   try {
     // isCreatingOrder.value = true
-    const { data: favorites } = await axios.get(`https://3c5b6e4314bc9170.mokky.dev/favorites`)
+    const { data: favorites } = await axios.get(`https://91e076eff4e58ce7.mokky.dev/favorites`)
 
     items.value = items.value.map((item) => {
       const favorite = favorites.find((favorite) => favorite.parentId === item.id)
@@ -136,10 +139,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex justify-between items-center">
+  <div class="flex justify-between items-center search__wrapper">
     <h2 class="text-3xl font-bold mb-8">Все кроссовки</h2>
+    {{ isDeviceMobile }}
 
-    <div class="flex gap-4">
+    <div class="flex gap-4 filters__wrapper">
       <select @change="onChangeSelect" class="py-2 px-3 border rounded-md outline-none">
         <option value="title">По названию</option>
         <option value="price">По цене (Дешевые)</option>
@@ -161,3 +165,17 @@ onMounted(async () => {
     <CardList :items="items" @add-to-favorite="addToFavorite" @add-to-cart="onClickAddPlus" />
   </div>
 </template>
+
+<style lang="scss">
+@media screen and (max-width: 1200px) {
+  .search__wrapper {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .filters__wrapper {
+    flex-direction: column;
+  }
+}
+</style>
